@@ -1,0 +1,14 @@
+# Ignorer les dossiers node_modules
+node_modules/
+Frontend/node_modules/
+Backend/node_modules/
+
+# Ignorer les fichiers de logs
+*.log
+
+# Ignorer les fichiers de configuration locaux
+Frontend/.env
+Backend/.env
+
+# Ignorer les fichiers de lock
+package-lock.json
