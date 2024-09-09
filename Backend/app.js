@@ -1,8 +1,4 @@
-
-
-console.log('MONGO_URI:', process.env.MONGO_URI);
-
-require('dotenv').config();  // Charger les variables d'environnement depuis le fichier .env
+require('dotenv').config();  // Charger les variables d'environnement
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -12,7 +8,7 @@ console.log('MONGO_URI:', process.env.MONGO_URI);
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connexion réussie à MongoDB'))
-  .catch(err => console.error('Erreur de connexion à MongoDB :', err));
+  .catch(error => console.error('Erreur de connexion à MongoDB :', error));
 
 // Middleware CORS
 app.use((req, res, next) => {
