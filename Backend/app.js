@@ -1,12 +1,18 @@
+
+
+console.log('MONGO_URI:', process.env.MONGO_URI);
+
+require('dotenv').config();  // Charger les variables d'environnement depuis le fichier .env
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
+console.log('MONGO_URI:', process.env.MONGO_URI);
+
 // Connexion à MongoDB
-mongoose.connect('mongodb+srv://<username>:<password>@cluster0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-  { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  .catch((error) => console.log('Connexion à MongoDB échouée : ', error));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connexion réussie à MongoDB'))
+  .catch(err => console.error('Erreur de connexion à MongoDB :', err));
 
 // Middleware CORS
 app.use((req, res, next) => {
