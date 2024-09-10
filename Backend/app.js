@@ -3,6 +3,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
+const Books = require('./models/books');
+const books = require('./models/books');
+
+
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
 // Connexion à MongoDB
@@ -18,10 +22,25 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
 // Route pour la racine
 app.get('/', (req, res) => {
   res.send('Bienvenue sur la page d\'accueil !');
 });
+
+
+//Test Post 
+app.post('/api/books',(req,res,next) => {
+  delete req.body._id;
+  const books = new Books({
+  ... req.body
+});
+books.save()
+ .then(()=> res.status(201).json({message: 'Objet enregistré'}))
+ .catch(error = res.status(400).json({error}));
+});
+
 
 // Exemple de route pour /api/books
 app.use('/api/books', (req, res, next) => {
