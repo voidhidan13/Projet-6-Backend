@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const app = express();
 
 const Books = require('./models/books');
-const books = require('./models/books');
 
+// Middleware pour parser le JSON
+app.use(express.json());
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
@@ -22,53 +23,27 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 // Route pour la racine
 app.get('/', (req, res) => {
   res.send('Bienvenue sur la page d\'accueil !');
 });
 
-
-//Test Post 
-app.post('/api/books',(req,res,next) => {
+// Route POST pour ajouter un livre
+app.post('/api/books', (req, res, next) => {
   delete req.body._id;
   const books = new Books({
-  ... req.body
-});
-books.save()
- .then(()=> res.status(201).json({message: 'Objet enregistré'}))
- .catch(error = res.status(400).json({error}));
-});
-
-
-// Exemple de route pour /api/books
-app.use('/api/books', (req, res, next) => {
-  const books = [
-    {
-      _id: 'oeihfzeoi',
-      title: 'Mon premier objet',
-      description: 'Les infos de mon premier objet',
-      imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-      price: 4900,
-      userId: 'qsomihvqios',
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'Mon deuxième objet',
-      description: 'Les infos de mon deuxième objet',
-      imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-      price: 2900,
-      userId: 'qsomihvqios',
-    },
-  ];
-  res.status(200).json(books);
+    ...req.body
+  });
+  books.save()  // Sauvegarde du livre
+    .then(() => res.status(201).json({ message: 'Objet enregistré' }))
+    .catch(error => res.status(400).json({ error }));
 });
 
-// Gestion des routes non trouvées
-app.use((req, res, next) => {
-  res.status(404).json({ message: 'Route non trouvée !' });
+// Route GET pour récupérer tous les livres
+app.get('/api/books', (req, res, next) => {
+  Books.find()  // Recherche de tous les livres
+    .then(books => res.status(200).json(books))
+    .catch(error => res.status(400).json({ error }));
 });
 
-// Exportation de l'application Express
 module.exports = app;

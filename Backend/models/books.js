@@ -18,4 +18,4 @@ ratings: [
   averageRating: { type: Number, required: true }, 
 });
 
-module.exports = mongoose.model('Books', BooksSchema); 
+module.exports = mongoose.model('Books', booksSchema); 
