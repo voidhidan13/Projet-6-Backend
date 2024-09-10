@@ -4,9 +4,8 @@ const mongoose = require('mongoose');
 const app = express();
 
 const Books = require('./models/books');
-
-// Middleware pour parser le JSON
-app.use(express.json());
+const parsingMiddleware = require('./middleware/parsing');  // Importer le middleware de parsing JSON
+const corsMiddleware = require('./middleware/cors');  // Importer le middleware CORS
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
@@ -15,13 +14,9 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connexion réussie à MongoDB'))
   .catch(error => console.error('Erreur de connexion à MongoDB :', error));
 
-// Middleware CORS
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  next();
-});
+// Utiliser les middlewares
+app.use(parsingMiddleware);  
+app.use(corsMiddleware);  
 
 // Route pour la racine
 app.get('/', (req, res) => {
@@ -34,14 +29,14 @@ app.post('/api/books', (req, res, next) => {
   const books = new Books({
     ...req.body
   });
-  books.save()  // Sauvegarde du livre
+  books.save()
     .then(() => res.status(201).json({ message: 'Objet enregistré' }))
     .catch(error => res.status(400).json({ error }));
 });
 
 // Route GET pour récupérer tous les livres
 app.get('/api/books', (req, res, next) => {
-  Books.find()  // Recherche de tous les livres
+  Books.find()
     .then(books => res.status(200).json(books))
     .catch(error => res.status(400).json({ error }));
 });
