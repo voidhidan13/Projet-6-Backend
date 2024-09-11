@@ -3,9 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
-const Books = require('./models/books');
 const parsingMiddleware = require('./middleware/parsing');  // Importer le middleware de parsing JSON
 const corsMiddleware = require('./middleware/cors');  // Importer le middleware CORS
+const booksRoutes = require('./routes/books');  // Importer le fichier de routes des livres
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
@@ -23,22 +23,10 @@ app.get('/', (req, res) => {
   res.send('Bienvenue sur la page d\'accueil !');
 });
 
-// Route POST pour ajouter un livre
-app.post('/api/books', (req, res, next) => {
-  delete req.body._id;
-  const books = new Books({
-    ...req.body
-  });
-  books.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré' }))
-    .catch(error => res.status(400).json({ error }));
-});
 
-// Route GET pour récupérer tous les livres
-app.get('/api/books', (req, res, next) => {
-  Books.find()
-    .then(books => res.status(200).json(books))
-    .catch(error => res.status(400).json({ error }));
-});
+// Utiliser les routes pour les livres, avec le chemin de base '/api/books'
+app.use('/api/books', booksRoutes);
+
+
 
 module.exports = app;
