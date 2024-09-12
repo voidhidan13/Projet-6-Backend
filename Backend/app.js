@@ -3,9 +3,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
-const parsingMiddleware = require('./middleware/parsing');  // Importer le middleware de parsing JSON
-const corsMiddleware = require('./middleware/cors');  // Importer le middleware CORS
-const booksRoutes = require('./routes/books');  // Importer le fichier de routes des livres
+
+// Import middleware
+const parsingMiddleware = require('./middleware/parsing');  
+const corsMiddleware = require('./middleware/cors');  
+
+// Import routes
+const booksRoutes = require('./routes/books'); 
+const usersRoutes = require('./routes/users');
+
+// Importer le fichier de routes des livres
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
@@ -26,6 +33,7 @@ app.get('/', (req, res) => {
 
 // Utiliser les routes pour les livres, avec le chemin de base '/api/books'
 app.use('/api/books', booksRoutes);
+app.use('/api/auth', usersRoutes);
 
 
 
