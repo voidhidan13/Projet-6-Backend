@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const Users = require('../models/users');
 const jwt = require('jsonwebtoken');
 
+//S'INSCRIRE
+
 exports.signup = (req,res,next) => {
     //hachage 
     bcrypt.hash(req.body.password, 10)
@@ -18,6 +20,8 @@ exports.signup = (req,res,next) => {
     .catch(error => res.status(500).json({error}));
 
 };
+
+// SE CONNECTER
 
 exports.login = (req, res, next) => {
     // Trouver l'utilisateur par email
@@ -52,6 +56,11 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
+
+
+
+//Mot de passe oublié
+
 
 exports.forgotPassword = (req, res, next) => {
     const { email } = req.body;
