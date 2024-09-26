@@ -1,13 +1,20 @@
 require('dotenv').config();  // Charger les variables d'environnement
 const express = require('express');
+const cors = require('cors'); 
 const mongoose = require('mongoose');
 const app = express();
 const path = require("path");
 
+app.use(cors());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 
 // Import middleware
 const parsingMiddleware = require('./middleware/parsing');  
-const corsMiddleware = require('./middleware/cors');  
 
 // Import routes
 const booksRoutes = require('./routes/books'); 
@@ -24,7 +31,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Utiliser les middlewares
 app.use(parsingMiddleware);  
-app.use(corsMiddleware);  
+  
 
 // Route pour la racine
 app.get('/', (req, res) => {
