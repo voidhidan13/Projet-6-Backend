@@ -2,6 +2,7 @@ require('dotenv').config();  // Charger les variables d'environnement
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const path = require("path");
 
 
 // Import middleware
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 // Utiliser les routes pour les livres, avec le chemin de base '/api/books'
 app.use('/api/books', booksRoutes);
 app.use('/api/auth', usersRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 
