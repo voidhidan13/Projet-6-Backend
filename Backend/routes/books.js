@@ -1,29 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const booksController = require('../controllers/books');
 const auth = require('../middleware/auth');
 const { upload, optimizeImage } = require('../middleware/multer-config');
 
+const bookCtrl = require('../controllers/books')
 
-// Route POST pour ajouter un livre
-router.post('/', auth ,upload,optimizeImage, booksController.createBook);
+router.post('/', auth, upload, optimizeImage, bookCtrl.createBook); 
+router.put('/:id', auth, upload, optimizeImage, bookCtrl.modifyBook);
+router.delete('/:id', auth, bookCtrl.deleteBook);
+router.get('/bestrating', bookCtrl.getBestRatedBooks);
+router.get('/:id', bookCtrl.getOneBook);
+router.get('/', bookCtrl.getAllBooks);
+router.post('/:id/rating', auth, bookCtrl.rateBook);
 
-// Route POST pour noter un livre 
-router.post('/:id/rating',auth, booksController.rateBooks);
-
-// Route GET pour récupérer tous les livres
-router.get('/', booksController.getAllBooks);
-
-// Route GET pour récupérer un livre par son ID
-router.get('/:id', booksController.getOneBook);
-
-//Route Get pour récupérer les trois meilleurs livres 
-router.get('/bestrating', booksController.getBestRatedBooks);
-
-// Route PUT pour modifier un livre existant
-router.put('/:id',auth,upload,optimizeImage, booksController.updateBook);
-
-// Route DELETE pour supprimer un livre
-router.delete('/:id',auth, booksController.deleteBook);
 
 module.exports = router;
